@@ -301,8 +301,10 @@ void CPU::OP_Fx65(uint16_t op) {
 }
 
 void CPU::execute() {
-    uint16_t op = fetch();
-    decode(op);
+    currentPC = pc;
+    currentOpcode = fetch();
+    decode(currentOpcode);
+
 }
 void CPU::tickTimers() {
     if (delayTimer > 0) delayTimer--;

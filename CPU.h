@@ -25,6 +25,9 @@ private:
     uint8_t V[16]{};
     uint8_t delayTimer = 0;
     uint8_t soundTimer = 0;
+    uint16_t currentPC = 0x200;
+    uint16_t currentOpcode = 0;
+
 
 private:
     // opcode handlers
@@ -76,6 +79,14 @@ public:
     void execute();
     void tickTimers();
     void clear();
+
+    uint16_t getPC() const {return pc;}
+    uint16_t getI() const {return I;}
+    uint8_t getRegister(int index) const {return V[index];}
+    uint8_t getDelayTimer() const {return delayTimer;}
+    uint8_t getSoundTimer() const {return soundTimer;}
+    uint16_t getCurrentPC() const {return currentPC;}
+    uint16_t getCurrentOpcode() const {return currentOpcode;}
 };
 
 

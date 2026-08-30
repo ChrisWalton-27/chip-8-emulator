@@ -30,6 +30,9 @@ public:
     void cycle();
     Display& getDisplay() { return display; }
     Keyboard& getKeyboard() { return keyboard; }
+    CPU& getCPU() { return cpu; }
+    Memory& getMemory() { return memory; }
+    Stack& getStack() { return stack; }
 };
 
 

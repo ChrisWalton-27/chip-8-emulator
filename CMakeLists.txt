@@ -22,7 +22,9 @@ add_executable(CHIP_8_Program main.cpp
         CPU.cpp
         CPU.h
         Platform.cpp
-        Platform.h)
+        Platform.h
+        Debugger.cpp
+        Debugger.h)
 
 target_link_libraries(CHIP_8_Program mingw32 SDL2main SDL2)
 

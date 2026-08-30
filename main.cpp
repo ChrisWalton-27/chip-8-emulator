@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
     Platform platform ("CHIP-8", 640, 320, 64, 32);
     chip8.loadROM("C:/Users/Davon/Downloads/Pong (1 player).ch8");
 
-    const int TARGET_CYCLE_TIME_US = 1400;
+    const int TARGET_CYCLE_TIME_US = 1260;
 
     bool quit = false;
     while (!quit) {

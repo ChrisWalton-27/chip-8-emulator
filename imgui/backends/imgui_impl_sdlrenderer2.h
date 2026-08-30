@@ -27,7 +27,7 @@
 
 #pragma once
 #ifndef IMGUI_DISABLE
-#include "imgui.h"
+#include "../imgui.h"
 
 struct SDL_Renderer;
 

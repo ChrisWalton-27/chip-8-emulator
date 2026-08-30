@@ -1,21 +1,21 @@
-#ifndef PLATFORM_H
-#define PLATFORM_H
+#pragma once
 
-#include <SDL2/SDL.h>
-#include "Display.h"
+#include <SDL.h>
 #include "Keyboard.h"
+#include "Chip8.h"
+#include "Debugger.h"
 
 class Platform {
-private:
-    SDL_Window*   window   = nullptr;
-    SDL_Renderer* renderer = nullptr;
-    SDL_Texture*  texture  = nullptr;
-
 public:
-    Platform(const char* title, int windowWidth, int windowHeight, int textureWidth, int textureHeight);
+    Platform(const char* title, int windowWidth, int windowHeight,
+             int textureWidth, int textureHeight);
     ~Platform();
-    bool processInput(Keyboard& keyboard);
-    void update(Display& display);
-};
 
-#endif //PLATFORM_H
+    bool processInput(Keyboard& keyboard);
+    void update(Chip8& chip8, Debugger& debugger);
+
+private:
+    SDL_Window* window = nullptr;
+    SDL_Renderer* renderer = nullptr;
+    SDL_Texture* texture = nullptr;
+};

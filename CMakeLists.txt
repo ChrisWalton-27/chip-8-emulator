@@ -6,12 +6,11 @@ set(CMAKE_CXX_STANDARD 17)
 # SDL2 path
 set(SDL2_PATH "C:/SDL2/SDL2-devel-2.32.0-mingw/SDL2-2.32.0/x86_64-w64-mingw32")
 
-# Include + lib directories
-include_directories(${SDL2_PATH}/include)
-include_directories(${SDL2_PATH}/include/SDL2)   # <-- REQUIRED FIX
+# SDL2 include + lib directories (ONLY include/SDL2 is correct)
+include_directories(${SDL2_PATH}/include/SDL2)
 link_directories(${SDL2_PATH}/lib)
 
-# Executable + all source files (including ImGui)
+# Executable + all source files
 add_executable(CHIP_8_Program
         main.cpp
 
@@ -30,7 +29,7 @@ add_executable(CHIP_8_Program
         imgui/imgui_tables.cpp
         imgui/imgui_widgets.cpp
 
-        # Dear ImGui SDL2 + SDL_Renderer backends
+        # Dear ImGui SDL2 + SDL_Renderer2 backends
         imgui/backends/imgui_impl_sdl2.cpp
         imgui/backends/imgui_impl_sdlrenderer2.cpp
 )
@@ -39,8 +38,7 @@ add_executable(CHIP_8_Program
 target_include_directories(CHIP_8_Program PRIVATE
         imgui
         imgui/backends
-        ${SDL2_PATH}/include
-        ${SDL2_PATH}/include/SDL2   # <-- REQUIRED FIX
+        ${SDL2_PATH}/include/SDL2
 )
 
 # Link SDL2

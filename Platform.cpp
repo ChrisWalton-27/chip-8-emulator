@@ -19,6 +19,10 @@ Platform::Platform(const char* title, int windowWidth, int windowHeight, int tex
 }
 
 Platform::~Platform() {
+    ImGui_ImplSDLRenderer2_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
+    ImGui::DestroyContext();
+
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
@@ -84,6 +88,14 @@ bool Platform::processInput(Keyboard& keyboard) {
 }
 
 void Platform::update(Display& display) {
+    ImGui_ImplSDLRenderer2_NewFrame();
+    ImGui_ImplSDL2_NewFrame();
+    ImGui::NewFrame();
+
+    ImGui::Begin("CHIP-8 Debugger");
+    ImGui::Text("Debugger online");
+    ImGui::End();
+
     uint32_t buffer[64 * 32];
     const bool* pixels = display.getPixels();
     for (int y = 0; y < 32; y++) {
@@ -94,5 +106,8 @@ void Platform::update(Display& display) {
     SDL_UpdateTexture(texture, nullptr, buffer, 64 * sizeof(uint32_t));
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, nullptr, nullptr);
+
+    ImGui::Render();
+    ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
     SDL_RenderPresent(renderer);
 }

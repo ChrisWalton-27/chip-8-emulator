@@ -156,7 +156,8 @@ void Platform::update(Chip8& chip8, Debugger& debugger) {
             off += snprintf(line + off, sizeof(line) - off, "%02X ", mem.read(addr + i));
         ImGui::Text("%s", line);
     }
-
+    ImGui::EndChild();
+    ImGui::End();
     // Disassembly window
     ImGui::Begin("Disassembly");
 
@@ -179,15 +180,9 @@ void Platform::update(Chip8& chip8, Debugger& debugger) {
             ImGui::Text("%03X: %s", addr, text.c_str());
     }
 
-    ImGui::EndChild();
-    ImGui::End();
+    ImGui::EndChild();   // ⭐ ONLY ONE
+    ImGui::End();        // ⭐ ONLY ONE
 
-
-    ImGui::EndChild();
-    ImGui::End();
-
-    ImGui::EndChild();
-    ImGui::End();
 
     // CHIP-8 display
     uint32_t buffer[64 * 32];

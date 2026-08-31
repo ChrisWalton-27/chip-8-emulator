@@ -310,3 +310,7 @@ void CPU::tickTimers() {
     if (delayTimer > 0) delayTimer--;
     if (soundTimer > 0) soundTimer--;
 }
+void CPU::setRegister(int index, uint8_t value) {
+    V[index] = value;
+}
+

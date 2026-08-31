@@ -117,8 +117,18 @@ void Platform::update(Chip8& chip8, Debugger& debugger) {
     ImGui::Separator();
 
     ImGui::Text("Registers:");
-    for (int i = 0; i < 16; i++)
-        ImGui::Text("V%X: %02X", i, cpu.getRegister(i));
+    for (int i = 0; i < 16; i++) {
+        uint8_t value = cpu.getRegister(i);
+        char label[8];
+        snprintf(label, sizeof(label), "V%X", i);
+
+        int temp = value; // ImGui uses int for InputInt
+        if (ImGui::InputInt(label, &temp, 1, 16)) {
+            temp &= 0xFF; // clamp to 8-bit
+            cpu.setRegister(i, (uint8_t)temp);
+        }
+    }
+
 
     ImGui::Separator();
     ImGui::Text("I: 0x%03X", cpu.getI());
@@ -174,11 +184,29 @@ void Platform::update(Chip8& chip8, Debugger& debugger) {
         uint16_t opcode = mem2.read16(addr);
         std::string text = chip8.disassemble(opcode, addr);
 
+        bool bp = debugger.hasBreakpoint(addr);
+
+        // Breakpoint indicator
+        if (bp)
+            ImGui::TextColored(ImVec4(1,0,0,1), "●");   // red dot
+        else
+            ImGui::Text("○");                           // empty circle
+
+        ImGui::SameLine();
+
+        // Instruction text
         if (addr == pc)
-            ImGui::TextColored(ImVec4(1, 1, 0, 1), "-> %03X: %s", addr, text.c_str());
+            ImGui::TextColored(ImVec4(1,1,0,1), "%03X: %s", addr, text.c_str());
         else
             ImGui::Text("%03X: %s", addr, text.c_str());
+
+        // Toggle breakpoint when clicked
+        if (ImGui::IsItemClicked()) {
+            if (bp) debugger.removeBreakpoint(addr);
+            else    debugger.addBreakpoint(addr);
+        }
     }
+
 
     ImGui::EndChild();   // ⭐ ONLY ONE
     ImGui::End();        // ⭐ ONLY ONE

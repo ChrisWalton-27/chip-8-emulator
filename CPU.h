@@ -83,6 +83,7 @@ public:
     uint16_t getPC() const {return pc;}
     uint16_t getI() const {return I;}
     uint8_t getRegister(int index) const {return V[index];}
+    void setRegister(int index, uint8_t value);
     uint8_t getDelayTimer() const {return delayTimer;}
     uint8_t getSoundTimer() const {return soundTimer;}
     uint16_t getCurrentPC() const {return currentPC;}

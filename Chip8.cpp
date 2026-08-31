@@ -48,4 +48,11 @@ void Chip8::cycle() {
     cpu.execute();
     cpu.tickTimers();
 }
+std::string Chip8::disassemble(uint16_t opcode, uint16_t pc) const {
+    uint16_t nnn = opcode & 0x0FFF;
+    uint8_t nn = opcode & 0x00FF;
+    uint8_t n = opcode & 0x000F;
+    uint8_t x  =(opcode & 0x0F00) >> 8;
+    uint8_t y  =(opcode & 0x00F0) >> 4;
+}
 

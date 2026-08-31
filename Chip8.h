@@ -33,6 +33,8 @@ public:
     CPU& getCPU() { return cpu; }
     Memory& getMemory() { return memory; }
     Stack& getStack() { return stack; }
+    std::string disassemble(uint16_t opcode, uint16_t pc) const;
+
 };
 
 

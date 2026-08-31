@@ -155,19 +155,44 @@ void Platform::update(Chip8& chip8, Debugger& debugger) {
 
     // Memory window
     ImGui::Begin("Memory");
+
     Memory& mem = chip8.getMemory();
+
+    // Scrollable region
     ImGui::BeginChild("memscroll", ImVec2(0, 400), true);
+
     for (uint16_t addr = 0; addr < 4096; addr += 16) {
+
+        // Address label
         ImGui::Text("0x%03X:", addr);
         ImGui::SameLine();
-        char line[128];
-        int off = 0;
-        for (int i = 0; i < 16; i++)
-            off += snprintf(line + off, sizeof(line) - off, "%02X ", mem.read(addr + i));
-        ImGui::Text("%s", line);
+
+        // 16 editable bytes
+        for (int i = 0; i < 16; i++) {
+            uint8_t value = mem.read(addr + i);
+
+            // Unique label for ImGui
+            char label[16];
+            snprintf(label, sizeof(label), "%03X_%X", addr, i);
+
+            int temp = value;
+
+            ImGui::PushItemWidth(30); // small hex box
+            if (ImGui::InputInt(label, &temp, 1, 16, ImGuiInputTextFlags_CharsHexadecimal)) {
+                temp &= 0xFF; // clamp to 8-bit
+                mem.write(addr + i, (uint8_t)temp);
+            }
+            ImGui::PopItemWidth();
+
+            ImGui::SameLine();
+        }
+
+        ImGui::NewLine();
     }
+
     ImGui::EndChild();
     ImGui::End();
+
     // Disassembly window
     ImGui::Begin("Disassembly");
 

@@ -182,6 +182,10 @@ void Platform::update(Chip8& chip8, Debugger& debugger) {
     ImGui::EndChild();
     ImGui::End();
 
+
+    ImGui::EndChild();
+    ImGui::End();
+
     ImGui::EndChild();
     ImGui::End();
 

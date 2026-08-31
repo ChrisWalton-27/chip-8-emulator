@@ -9,12 +9,12 @@
 int main(int argc, char* argv[]) {
 
     Chip8 chip8;
-    Platform platform("CHIP-8", 640, 320, 64, 32);
+    Platform platform("CHIP-8", 1280, 720, 64, 32);
     Debugger debugger;
 
     chip8.loadROM("C:/Users/Davon/Downloads/Pong (1 player).ch8");
 
-    const int TARGET_CYCLE_TIME_US = 1060;
+    const int TARGET_CYCLE_TIME_US = 760;
 
     bool quit = false;
     while (!quit) {
@@ -24,7 +24,11 @@ int main(int argc, char* argv[]) {
 
         debugger.update(chip8);
 
-        platform.update(chip8, debugger);
+        static int frameCount = 0;
+        if (++frameCount >= 8) {
+            platform.update(chip8, debugger);
+            frameCount = 0;
+        }
 
         auto endTime = std::chrono::high_resolution_clock::now();
         auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();

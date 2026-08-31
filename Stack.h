@@ -4,8 +4,8 @@
 
 class Stack {
 private:
-    uint16_t data[16]{};   // CHIP-8 stores 16-bit return addresses
-    uint8_t sp = 0;        // stack pointer (not shown in UML but required)
+    uint16_t data[16]{};
+    uint8_t sp = 0;
 
 public:
     Stack();

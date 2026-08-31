@@ -9,6 +9,9 @@
 #include "backends/imgui_impl_sdl2.h"
 #include "backends/imgui_impl_sdlrenderer2.h"
 
+
+
+
 Platform::Platform(const char* title, int windowWidth, int windowHeight,
                    int textureWidth, int textureHeight) {
 
@@ -21,6 +24,8 @@ Platform::Platform(const char* title, int windowWidth, int windowHeight,
     // ImGui init
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     ImGui::StyleColorsDark();
 
     ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
@@ -106,8 +111,19 @@ void Platform::update(Chip8& chip8, Debugger& debugger) {
     ImGui_ImplSDLRenderer2_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
+    ImGui::DockSpaceOverViewport();
 
+    ImGui::Begin("Display");
+
+    ImGui::SetWindowSize(ImVec2(660, 360), ImGuiCond_FirstUseEver);
+    ImGui::SetWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
+
+    // Draw CHIP-8 screen inside ImGui
+    ImGui::Image((void*)texture, ImVec2(640, 320));
+
+    ImGui::End();
     // CPU window
+    ImGui::SetNextWindowSize(ImVec2(350, 300), ImGuiCond_FirstUseEver);
     ImGui::Begin("CHIP-8 Debugger");
 
     CPU& cpu = chip8.getCPU();
@@ -145,6 +161,7 @@ void Platform::update(Chip8& chip8, Debugger& debugger) {
     ImGui::End();
 
     // Stack window
+    ImGui::SetNextWindowSize(ImVec2(350, 200), ImGuiCond_FirstUseEver);
     ImGui::Begin("Stack");
     Stack& stack = chip8.getStack();
     ImGui::Text("SP: %d", stack.getSP());
@@ -154,6 +171,7 @@ void Platform::update(Chip8& chip8, Debugger& debugger) {
     ImGui::End();
 
     // Memory window
+    ImGui::SetNextWindowSize(ImVec2(350, 400), ImGuiCond_FirstUseEver);
     ImGui::Begin("Memory");
 
     Memory& mem = chip8.getMemory();
@@ -177,7 +195,7 @@ void Platform::update(Chip8& chip8, Debugger& debugger) {
 
             int temp = value;
 
-            ImGui::PushItemWidth(30); // small hex box
+            ImGui::PushItemWidth(30);
             if (ImGui::InputInt(label, &temp, 1, 16, ImGuiInputTextFlags_CharsHexadecimal)) {
                 temp &= 0xFF; // clamp to 8-bit
                 mem.write(addr + i, (uint8_t)temp);
@@ -194,6 +212,7 @@ void Platform::update(Chip8& chip8, Debugger& debugger) {
     ImGui::End();
 
     // Disassembly window
+    ImGui::SetNextWindowSize(ImVec2(350, 300), ImGuiCond_FirstUseEver);
     ImGui::Begin("Disassembly");
 
     uint16_t pc = chip8.getCPU().getPC();
@@ -215,7 +234,7 @@ void Platform::update(Chip8& chip8, Debugger& debugger) {
         if (bp)
             ImGui::TextColored(ImVec4(1,0,0,1), "●");   // red dot
         else
-            ImGui::Text("○");                           // empty circle
+            ImGui::Text("○");
 
         ImGui::SameLine();
 
@@ -233,11 +252,10 @@ void Platform::update(Chip8& chip8, Debugger& debugger) {
     }
 
 
-    ImGui::EndChild();   // ⭐ ONLY ONE
-    ImGui::End();        // ⭐ ONLY ONE
+    ImGui::EndChild();
+    ImGui::End();
 
 
-    // CHIP-8 display
     uint32_t buffer[64 * 32];
     for (int y = 0; y < 32; y++)
         for (int x = 0; x < 64; x++)
@@ -246,12 +264,8 @@ void Platform::update(Chip8& chip8, Debugger& debugger) {
 
     SDL_UpdateTexture(texture, nullptr, buffer, 64 * sizeof(uint32_t));
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, texture, nullptr, nullptr);
-
-    // ImGui render
     ImGui::Render();
     ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), renderer);
-
-
     SDL_RenderPresent(renderer);
 }
+

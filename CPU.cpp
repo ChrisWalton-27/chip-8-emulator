@@ -22,7 +22,7 @@ void CPU::decode(uint16_t op) {
             switch (op & 0x00FF) {
                 case 0xE0: OP_00E0(op); break;
                 case 0xEE: OP_00EE(op); break;
-                default:   OP_0nnn(op); break; // SYS (rarely used)
+                default:   OP_0nnn(op); break;
             }
             break;
 

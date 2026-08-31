@@ -15,6 +15,7 @@
 //  [X] Renderer: Texture updates support for dynamic font atlas (ImGuiBackendFlags_RendererHasTextures).
 //  [X] Renderer: Expose selected render state for draw callbacks to use. Access in '(ImGui_ImplXXXX_RenderState*)GetPlatformIO().Renderer_RenderState'.
 // Missing features or Issues:
+//  [ ] Renderer: Multi-viewport support (multiple windows).
 //  [ ] Renderer: Missing support for DrawCallback_SetSamplerLinear, DrawCallback_SetSamplerNearest callbacks: SDLRenderer2 does not support changing SDL_SCALE_MODE while rendering.
 
 // You can use unmodified imgui_impl_* files in your project. See examples/ folder for examples of using this.
@@ -41,7 +42,7 @@
 //  2021-10-06: Backup and restore modified ClipRect/Viewport.
 //  2021-09-21: Initial version.
 
-#include "../imgui.h"
+#include "imgui.h"
 #ifndef IMGUI_DISABLE
 #include "imgui_impl_sdlrenderer2.h"
 #include <stdint.h>     // intptr_t

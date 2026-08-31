@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -22,7 +22,6 @@ int main(int argc, char* argv[]) {
 
         quit = platform.processInput(chip8.getKeyboard());
 
-        // ⭐ The debugger is now the ONLY thing that runs the CPU
         debugger.update(chip8);
 
         platform.update(chip8, debugger);

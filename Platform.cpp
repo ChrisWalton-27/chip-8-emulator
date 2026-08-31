@@ -156,6 +156,32 @@ void Platform::update(Chip8& chip8, Debugger& debugger) {
             off += snprintf(line + off, sizeof(line) - off, "%02X ", mem.read(addr + i));
         ImGui::Text("%s", line);
     }
+
+    // Disassembly window
+    ImGui::Begin("Disassembly");
+
+    uint16_t pc = chip8.getCPU().getPC();
+    Memory& mem2 = chip8.getMemory();
+
+    // Show a few instructions before and after PC
+    uint16_t start = (pc >= 10) ? pc - 10 : 0;
+    uint16_t end   = (pc + 20 < 4096) ? pc + 20 : 4094;
+
+    ImGui::BeginChild("disasm_scroll", ImVec2(0, 300), true);
+
+    for (uint16_t addr = start; addr < end; addr += 2) {
+        uint16_t opcode = mem2.read16(addr);
+        std::string text = chip8.disassemble(opcode, addr);
+
+        if (addr == pc)
+            ImGui::TextColored(ImVec4(1, 1, 0, 1), "-> %03X: %s", addr, text.c_str());
+        else
+            ImGui::Text("%03X: %s", addr, text.c_str());
+    }
+
+    ImGui::EndChild();
+    ImGui::End();
+
     ImGui::EndChild();
     ImGui::End();
 

@@ -10,6 +10,7 @@ private:
 public:
     Memory();
     uint8_t read(uint16_t addr);
+    uint16_t read16(uint16_t addr) const;
     void write(uint16_t addr, uint8_t value);
 };
 
